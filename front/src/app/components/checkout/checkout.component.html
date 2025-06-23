@@ -1,0 +1,127 @@
+<div class="container">
+  <h1>Finaliser votre commande</h1>
+  
+  <div class="checkout-content" *ngIf="cart.items.length > 0">
+    <div class="checkout-form">
+      <h2>Informations de livraison</h2>
+      
+      <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()">
+        <div class="form-group">
+          <label for="firstname">Prénom</label>
+          <input 
+            type="text" 
+            id="firstname" 
+            formControlName="firstname" 
+            [class.error]="submitted && f['firstname'].errors">
+          <div class="error-message" *ngIf="submitted && f['firstname'].errors">
+            Le prénom est requis
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="lastname">Nom</label>
+          <input 
+            type="text" 
+            id="lastname" 
+            formControlName="lastname" 
+            [class.error]="submitted && f['lastname'].errors">
+          <div class="error-message" *ngIf="submitted && f['lastname'].errors">
+            Le nom est requis
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            [class.error]="submitted && f['email'].errors">
+          <div class="error-message" *ngIf="submitted && f['email'].errors?.['required']">
+            L'email est requis
+          </div>
+          <div class="error-message" *ngIf="submitted && f['email'].errors?.['email']">
+            L'email est invalide
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="address">Adresse</label>
+          <textarea 
+            id="address" 
+            formControlName="address" 
+            [class.error]="submitted && f['address'].errors"></textarea>
+          <div class="error-message" *ngIf="submitted && f['address'].errors">
+            L'adresse est requise
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Téléphone</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone" 
+            [class.error]="submitted && f['phone'].errors">
+          <div class="error-message" *ngIf="submitted && f['phone'].errors">
+            Le téléphone est requis
+          </div>
+        </div>
+        
+        <div class="form-group form-checkbox">
+          <input type="checkbox" id="save-info" formControlName="saveInfo">
+          <label for="save-info">Enregistrer ces informations pour mes prochaines commandes</label>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" routerLink="/cart" class="btn-back">Retour au panier</button>
+          <button type="submit" class="btn-place-order" [disabled]="isLoading">
+            <span *ngIf="!isLoading">Valider la commande</span>
+            <span *ngIf="isLoading">Traitement en cours...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <div class="order-summary">
+      <h2>Récapitulatif de la commande</h2>
+      
+      <div class="order-items">
+        <div class="order-item" *ngFor="let item of cart.items">
+          <div class="item-image">
+            <img [src]="item.product.image_url" [alt]="item.product.name">
+          </div>
+          <div class="item-details">
+            <h3>{{ item.product.name }}</h3>
+            <p class="item-quantity">Quantité: {{ item.quantity }}</p>
+            <p class="item-price">{{ item.product.price | currency:'EUR' }}</p>
+          </div>
+          <div class="item-total">
+            {{ (item.product.price * item.quantity) | currency:'EUR' }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="order-total">
+        <div class="total-row">
+          <span>Total</span>
+          <span class="total-price">{{ cart.totalAmount | currency:'EUR' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="checkout-empty" *ngIf="cart.items.length === 0">
+    <p>Votre panier est vide. Vous ne pouvez pas passer de commande.</p>
+    <button class="btn-continue-shopping" routerLink="/">Continuer mes achats</button>
+  </div>
+  
+  <div class="order-success" *ngIf="orderCompleted">
+    <div class="success-icon">✓</div>
+    <h2>Commande validée !</h2>
+    <p>Votre commande #{{ orderNumber }} a été enregistrée avec succès.</p>
+    <p>Un email de confirmation vous a été envoyé.</p>
+    <button class="btn-continue-shopping" routerLink="/">Continuer mes achats</button>
+    <button class="btn-view-orders" routerLink="/profile">Voir mes commandes</button>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="container">
+  <h1>Votre Panier</h1>
+  
+  <div class="cart-empty" *ngIf="cart.items.length === 0">
+    <p>Votre panier est vide.</p>
+    <button class="btn-continue-shopping" routerLink="/">Continuer mes achats</button>
+  </div>
+  
+  <div class="cart-content" *ngIf="cart.items.length > 0">
+    <div class="cart-items">
+      <div class="cart-item" *ngFor="let item of cart.items">
+        <div class="item-image">
+          <img [src]="item.product.image_url" [alt]="item.product.name">
+        </div>
+        
+        <div class="item-details">
+          <h3>{{ item.product.name }}</h3>
+          <p class="item-price">{{ item.product.price | currency:'EUR' }}</p>
+        </div>
+        
+        <div class="item-quantity">
+          <button class="btn-quantity" (click)="decreaseQuantity(item.product.id)">-</button>
+          <span>{{ item.quantity }}</span>
+          <button class="btn-quantity" (click)="increaseQuantity(item.product.id)" [disabled]="item.quantity >= item.product.stock">+</button>
+        </div>
+        
+        <div class="item-total">
+          {{ (item.product.price * item.quantity) | currency:'EUR' }}
+        </div>
+        
+        <div class="item-actions">
+          <button class="btn-remove" (click)="removeItem(item.product.id)">
+            <span class="material-icons">delete</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="cart-summary">
+      <h2>Récapitulatif</h2>
+      
+      <div class="summary-row">
+        <span>Total</span>
+        <span class="summary-total">{{ cart.totalAmount | currency:'EUR' }}</span>
+      </div>
+      
+      <button class="btn-checkout" routerLink="/checkout">Passer commande</button>
+      <button class="btn-clear-cart" (click)="clearCart()">Vider le panier</button>
+      <button class="btn-continue-shopping" routerLink="/">Continuer mes achats</button>
+    </div>
+  </div>
+</div>

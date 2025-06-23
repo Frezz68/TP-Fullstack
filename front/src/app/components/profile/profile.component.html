@@ -1,0 +1,107 @@
+<div class="container" *ngIf="user">
+  <h1>Mon Profil</h1>
+  
+  <div class="profile-content">
+    <div class="profile-info">
+      <h2>Informations personnelles</h2>
+      
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+        <div class="form-group">
+          <label for="firstname">Prénom</label>
+          <input type="text" id="firstname" formControlName="firstname" [class.error]="submitted && f['firstname'].errors">
+          <div class="error-message" *ngIf="submitted && f['firstname'].errors">
+            Le prénom est requis
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="lastname">Nom</label>
+          <input type="text" id="lastname" formControlName="lastname" [class.error]="submitted && f['lastname'].errors">
+          <div class="error-message" *ngIf="submitted && f['lastname'].errors">
+            Le nom est requis
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" [class.error]="submitted && f['email'].errors">
+          <div class="error-message" *ngIf="submitted && f['email'].errors?.['required']">
+            L'email est requis
+          </div>
+          <div class="error-message" *ngIf="submitted && f['email'].errors?.['email']">
+            L'email est invalide
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="address">Adresse</label>
+          <textarea id="address" formControlName="address" [class.error]="submitted && f['address'].errors"></textarea>
+          <div class="error-message" *ngIf="submitted && f['address'].errors">
+            L'adresse est requise
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Téléphone</label>
+          <input type="tel" id="phone" formControlName="phone" [class.error]="submitted && f['phone'].errors">
+          <div class="error-message" *ngIf="submitted && f['phone'].errors">
+            Le téléphone est requis
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn-update" [disabled]="isLoading">
+            <span *ngIf="!isLoading">Mettre à jour</span>
+            <span *ngIf="isLoading">Mise à jour en cours...</span>
+          </button>
+        </div>
+        
+        <div class="success-message" *ngIf="updateSuccess">
+          Vos informations ont été mises à jour avec succès !
+        </div>
+      </form>
+    </div>
+    
+    <div class="order-history">
+      <h2>Historique des commandes</h2>
+      
+      <div class="order-empty" *ngIf="orders.length === 0">
+        <p>Vous n'avez pas encore passé de commande.</p>
+        <button class="btn-shop-now" routerLink="/">Commencer vos achats</button>
+      </div>
+      
+      <div class="order-list" *ngIf="orders.length > 0">
+        <div class="order" *ngFor="let order of orders">
+          <div class="order-header">
+            <div class="order-number">Commande #{{ order.id }}</div>
+            <div class="order-date">{{ order.createdAt | date:'dd/MM/yyyy' }}</div>
+            <div class="order-status" [class]="order.status">
+              {{ getStatusLabel(order.status) }}
+            </div>
+            <div class="order-total">{{ order.total_amount | currency:'EUR' }}</div>
+          </div>
+          
+          <div class="order-items">
+            <div class="order-item" *ngFor="let item of order.orderItems">
+              <div class="item-image" *ngIf="item.product">
+                <img [src]="item.product.image_url" [alt]="item.product.name">
+              </div>
+              <div class="item-details" *ngIf="item.product">
+                <div class="item-name">{{ item.product.name }}</div>
+                <div class="item-quantity">Quantité: {{ item.quantity }}</div>
+                <div class="item-price">{{ item.price | currency:'EUR' }}</div>
+              </div>
+              <div class="item-total">
+                {{ (item.price * item.quantity) | currency:'EUR' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container loading" *ngIf="!user">
+  <p>Chargement de votre profil...</p>
+</div>

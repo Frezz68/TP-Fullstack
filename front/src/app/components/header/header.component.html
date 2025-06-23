@@ -1,0 +1,20 @@
+<div class="header">
+  <div class="logo">
+    <a routerLink="/">Amazoune</a>
+  </div>
+  <nav class="nav">
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a></li>
+      <li *ngIf="isLoggedIn"><a routerLink="/profile" routerLinkActive="active">Mon Compte</a></li>
+      <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active">Connexion</a></li>
+      <li *ngIf="!isLoggedIn"><a routerLink="/register" routerLinkActive="active">Inscription</a></li>
+      <li *ngIf="isLoggedIn"><a (click)="logout()" style="cursor: pointer;">Déconnexion</a></li>
+      <li class="cart-icon">
+        <a routerLink="/cart" routerLinkActive="active">
+          <span class="material-icons">shopping_cart</span>
+          <span class="cart-count" *ngIf="itemCount > 0">{{ itemCount }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

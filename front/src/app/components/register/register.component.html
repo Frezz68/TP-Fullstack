@@ -1,0 +1,95 @@
+<div class="container">
+  <div class="register-form">
+    <h1>Inscription</h1>
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstname">Prénom</label>
+          <input 
+            type="text" 
+            id="firstname" 
+            formControlName="firstname" 
+            [class.error]="submitted && f['firstname'].errors">
+          <div class="error-message" *ngIf="submitted && f['firstname'].errors">
+            Le prénom est requis
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="lastname">Nom</label>
+          <input 
+            type="text" 
+            id="lastname" 
+            formControlName="lastname" 
+            [class.error]="submitted && f['lastname'].errors">
+          <div class="error-message" *ngIf="submitted && f['lastname'].errors">
+            Le nom est requis
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          [class.error]="submitted && f['email'].errors">
+        <div class="error-message" *ngIf="submitted && f['email'].errors?.['required']">
+          L'email est requis
+        </div>
+        <div class="error-message" *ngIf="submitted && f['email'].errors?.['email']">
+          L'email est invalide
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password" 
+          [class.error]="submitted && f['password'].errors">
+        <div class="error-message" *ngIf="submitted && f['password'].errors?.['required']">
+          Le mot de passe est requis
+        </div>
+        <div class="error-message" *ngIf="submitted && f['password'].errors?.['minlength']">
+          Le mot de passe doit contenir au moins 6 caractères
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="address">Adresse</label>
+        <textarea 
+          id="address" 
+          formControlName="address" 
+          [class.error]="submitted && f['address'].errors"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="phone">Téléphone</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          formControlName="phone" 
+          [class.error]="submitted && f['phone'].errors">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn-register" [disabled]="isLoading">
+          <span *ngIf="!isLoading">S'inscrire</span>
+          <span *ngIf="isLoading">Inscription en cours...</span>
+        </button>
+      </div>
+      
+      <div class="error-message register-error" *ngIf="registerError">
+        {{ registerError }}
+      </div>
+      
+      <div class="login-link">
+        Déjà un compte ? <a routerLink="/login">Connectez-vous</a>
+      </div>
+    </form>
+  </div>
+</div>
